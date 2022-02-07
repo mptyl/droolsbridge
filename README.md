@@ -1,2 +1,2 @@
 # droolsbridge
-Bridge tra Theater e DRools
+Bridge tra Theater e Drools
