@@ -1,7 +1,5 @@
 package it.ctinnovation.droolsbridge;
 
-import com.amazonaws.services.sqs.AmazonSQSClient;
-import com.amazonaws.services.sqs.model.DeleteMessageRequest;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import com.amazonaws.services.sqs.model.SendMessageResult;
@@ -17,11 +15,6 @@ public class AwsManagerTest {
 
     @Autowired
     AWSQueueManager awsQueueManager;
-
-    @Test
-    public void testConnection(){
-        AmazonSQSClient amazonSQS = awsQueueManager.getInConsumerClient();
-    }
 
     @Test
     public void testReceiveInMessage(){

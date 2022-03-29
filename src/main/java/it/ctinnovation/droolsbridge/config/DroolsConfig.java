@@ -6,8 +6,8 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.STSAssumeRoleSessionCredentialsProvider;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenService;
 import com.amazonaws.services.securitytoken.AWSSecurityTokenServiceClientBuilder;
-import com.amazonaws.services.sns.AmazonSNS;
-import org.apache.commons.lang3.StringUtils;
+import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
 import org.kie.api.builder.KieFileSystem;
@@ -15,11 +15,11 @@ import org.kie.api.builder.KieModule;
 import org.kie.api.runtime.KieContainer;
 import org.kie.internal.io.ResourceFactory;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
@@ -85,12 +85,17 @@ public class DroolsConfig {
 
     }
 
-    @Bean("inConsumer")
-    public AWSCredentialsProvider awsSnsInConsumerCredential(){
-        AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder.standard()
+    @Bean
+    public AWSSecurityTokenService stsClient() {
+        return AWSSecurityTokenServiceClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
+    }
+
+    @Bean("inConsumer")
+    @Autowired
+    public AWSCredentialsProvider awsSnsInConsumerCredential(AWSSecurityTokenService stsClient){
         return new STSAssumeRoleSessionCredentialsProvider
                 .Builder(inConsumerRole, session)
                 .withStsClient(stsClient)
@@ -98,33 +103,48 @@ public class DroolsConfig {
     }
 
     @Bean("inProducer")
-    public AWSCredentialsProvider awsSnsInProducerCredential(){
-        AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder.standard()
-                .withRegion(region)
-                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-                .build();
+    @Autowired
+    public AWSCredentialsProvider awsSnsInProducerCredential(AWSSecurityTokenService stsClient){
         return new STSAssumeRoleSessionCredentialsProvider
                 .Builder(inProducerRole, session)
                 .withStsClient(stsClient)
                 .build();
     }
 
+    @Bean("outProducer")
+    @Autowired
+    public AWSCredentialsProvider awsSnsOutProducerCredential(AWSSecurityTokenService stsClient){
+        return new STSAssumeRoleSessionCredentialsProvider
+                .Builder(outProducerRole, session)
+                .withStsClient(stsClient)
+                .build();
+    }
 
-//    @Bean
-//    @Primary
-//    public AWSCredentialsProvider awsCredentialsProvider() {
-//        log.info("Assuming role {}",assumeRoleARN);
-//        if (StringUtils.isNotEmpty(assumeRoleARN)) {
-//            AWSSecurityTokenService stsClient = AWSSecurityTokenServiceClientBuilder.standard()
-//                    .withClientConfiguration(clientConfiguration())
-//                    .withCredentials(awsCredentialsProvider)
-//                    .build();
-//
-//            return new STSAssumeRoleSessionCredentialsProvider
-//                    .Builder(assumeRoleARN, "test")
-//                    .withStsClient(stsClient)
-//                    .build();
-//        }
-//        return awsCredentialsProvider;
-//    }
+    @Bean
+    @Autowired
+    AmazonSQSClient inConsumerClient(AWSCredentialsProvider inConsumer){
+        return (AmazonSQSClient) AmazonSQSClientBuilder.standard()
+                .withCredentials(inConsumer)
+                .withRegion(region)
+                .build();
+    }
+
+    @Bean
+    @Autowired
+    AmazonSQSClient inProducerClient(AWSCredentialsProvider inProducer){
+        return (AmazonSQSClient) AmazonSQSClientBuilder.standard()
+                .withCredentials(inProducer)
+                .withRegion(region)
+                .build();
+    }
+
+    @Bean
+    @Autowired
+    AmazonSQSClient outProducerClient(AWSCredentialsProvider outProducer){
+        return (AmazonSQSClient) AmazonSQSClientBuilder.standard()
+                .withCredentials(outProducer)
+                .withRegion(region)
+                .build();
+    }
+
 }

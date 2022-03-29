@@ -1,18 +1,15 @@
 package it.ctinnovation.droolsbridge.service;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClient;
-import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
-import com.amazonaws.services.sqs.model.*;
+import com.amazonaws.services.sqs.model.Message;
+import com.amazonaws.services.sqs.model.ReceiveMessageResult;
+import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.amazonaws.services.sqs.model.SendMessageResult;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.util.Optional;
 
 @Service
 public class AWSQueueManager {
@@ -24,40 +21,28 @@ public class AWSQueueManager {
     @Autowired
     AWSCredentialsProvider inProducer;
 
+    @Autowired
+    AWSCredentialsProvider outProducer;
+
     @Value("${cloud.aws.region.static}")
     private String region;
 
     @Value("${sqs.queues.in.url}")
     private String inUrl;
 
+    @Value("${sqs.queues.out.url}")
+    private String outUrl;
+
     private final String QUEUE_NAME = "drllsCTIQueue";
+
+    @Autowired
     private AmazonSQSClient inConsumerClient;
+
+    @Autowired
     private AmazonSQSClient inProducerClient;
 
-    @PostConstruct
-    private void initializeAmazonInConsumerSqsClient() {
-        this.inConsumerClient =
-                (AmazonSQSClient) AmazonSQSClientBuilder.standard()
-                        .withCredentials(inConsumer)
-                        .withRegion(region)
-                        .build();
-    }
-
-    @PostConstruct
-    private void initializeAmazonInProducerSqsClient() {
-        this.inProducerClient =
-                (AmazonSQSClient) AmazonSQSClientBuilder.standard()
-                        .withCredentials(inProducer)
-                        .withRegion(region)
-                        .build();
-    }
-
-    public AmazonSQSClient getInConsumerClient() {
-        return inConsumerClient;
-    }
-    public AmazonSQSClient getInProducerClient() {
-        return inProducerClient;
-    }
+    @Autowired
+    private AmazonSQSClient outProducerClient;
 
     public ReceiveMessageResult receiveInMessage(){
         return inConsumerClient.receiveMessage(inUrl);
@@ -72,8 +57,17 @@ public class AWSQueueManager {
         return inProducerClient.sendMessage(smr);
     }
 
+    public SendMessageResult sendOutMessage(String messageBody){
+        SendMessageRequest smr=new SendMessageRequest()
+                .withQueueUrl(outUrl)
+                .withMessageBody(messageBody)
+                .withMessageGroupId("MPGroup")
+                .withMessageDeduplicationId("DupId");
+        return outProducerClient.sendMessage(smr);
+    }
+
     public void deleteInMessage(Message message) {
-        getInConsumerClient().deleteMessage(inUrl,message.getReceiptHandle());
+        inConsumerClient.deleteMessage(inUrl,message.getReceiptHandle());
     }
 
 }
