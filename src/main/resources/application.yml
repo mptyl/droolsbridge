@@ -1,0 +1,37 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAZYQYWUM4BYVGYWNI
+      secretKey: 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
+    region:
+      static: eu-central-1
+      auto: false
+    roles:
+      in:
+        producer:
+          key: dev.geo.drools.in.producer
+          role: arn:aws:iam::671140455224:role/dev.geo.drools.in.producer
+        consumer:
+          key: dev.geo.drools.in.consumer
+          role: arn:aws:iam::671140455224:role/dev.geo.drools.in.consumer
+      out:
+        producer:
+          key: dev.geo.drools.out.producer
+          role: arn:aws:iam::671140455224:role/dev.geo.drools.out.producer
+        consumer:
+          key: dev.geo.drools.out.consumer
+          role: arn:aws:iam::671140455224:role/dev.geo.drools.out.consumer
+
+sqs:
+  session: test
+  queues:
+    in:
+      queue: dev-geo-drools-in.fifo
+      url: https://sqs.eu-central-1.amazonaws.com/671140455224/dev-geo-drools-in.fifo
+    out:
+      queue: dev-geo-drools-out.fifo
+      url: https://sqs.eu-central-1.amazonaws.com/671140455224/dev-geo-drools-out.fifo
+
+
+
+
