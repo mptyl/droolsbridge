@@ -28,6 +28,8 @@ sqs:
     in:
       queue: dev-geo-drools-in.fifo
       url: https://sqs.eu-central-1.amazonaws.com/671140455224/dev-geo-drools-in.fifo
+      waitTimeSeconds: 10
+      maxNumberMessages: 10
     out:
       queue: dev-geo-drools-out.fifo
       url: https://sqs.eu-central-1.amazonaws.com/671140455224/dev-geo-drools-out.fifo

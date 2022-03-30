@@ -1,6 +1,7 @@
 package it.ctinnovation.droolsbridge;
 
 import com.amazonaws.services.sqs.model.Message;
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import com.amazonaws.services.sqs.model.SendMessageResult;
 import it.ctinnovation.droolsbridge.service.AWSQueueManager;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 @SpringBootTest
 public class AwsManagerTest {
@@ -18,20 +21,20 @@ public class AwsManagerTest {
 
     @Test
     public void testReceiveInMessage(){
-        ReceiveMessageResult messages=awsQueueManager.receiveInMessage();
-        if(messages.getMessages().isEmpty())
+        List<Message> messages= awsQueueManager.receiveInMessage();
+        if(messages.isEmpty())
             log.info("Lista messaggi vuota");
         else
-            for(Message message:messages.getMessages()){
-                log.info("Body del message: {}",message.getBody());
-                awsQueueManager.deleteInMessage(message);
-            }
+        for(Message message:messages){
+            log.info ("Messaggio: {}",message.getBody());
+            awsQueueManager.deleteInMessage(message);
+        }
     }
 
     @Test
     public void testSendInMessage(){
-        SendMessageResult message=awsQueueManager.sendInMessage("Messaggio in uscita da Spring");
-        log.info("Inviato messaggio");
+        SendMessageResult message=awsQueueManager.sendInMessage("Messaggio in uscita da Spring 3");
+        log.info("Inviato messaggio "+ "Messaggio in uscita da Spring 3");
     }
 
 }

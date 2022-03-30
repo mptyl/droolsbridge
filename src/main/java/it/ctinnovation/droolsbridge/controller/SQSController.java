@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 public class SQSController {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(SQSController.class);
@@ -26,13 +28,13 @@ public class SQSController {
 
     @GetMapping(value = "/receiveMessage")
     public String receiveMessage(){
-        ReceiveMessageResult mr=awsQueueManager.receiveInMessage();
-        if(mr.getMessages().size()==0)
+        List<Message> messages=awsQueueManager.receiveInMessage();
+        if(messages.isEmpty())
             return "Coda messaggi vuota";
         StringBuilder response_message=new StringBuilder();
-        for(Message msg:mr.getMessages()){
+        for(Message msg:messages){
             response_message.append(msg.getBody()+"\n");
         }
-        return String.format("Ricevuti messaggi %s: ",response_message.toString());
+        return String.format("Ricevuti messaggi:\n%s ",response_message.toString());
     }
 }
