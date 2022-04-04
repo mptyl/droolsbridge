@@ -21,9 +21,9 @@ public class SQSController {
 
     @PostMapping(value = "/sendMessage")
     public String sendMessage(@RequestBody String message){
-        log.info("Messaggio: {}",message);
+        log.info("Messaggio:\n{}",message);
         awsQueueManager.sendInMessage(message);
-        return "Inviato messaggio: "+message;
+        return "Inviato messaggio:\n"+message;
     }
 
     @GetMapping(value = "/receiveMessage")
