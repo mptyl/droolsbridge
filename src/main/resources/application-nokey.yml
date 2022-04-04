@@ -34,6 +34,46 @@ sqs:
       queue: dev-geo-drools-out.fifo
       url: https://sqs.eu-central-1.amazonaws.com/671140455224/dev-geo-drools-out.fifo
 
-
+drools:
+  rule-group-id: 'it.ctinnovation.theater'
+  rule-artifact-id: 'demo-rules'
+  rule-version: '1.0-SNAPSHOT'
+  kie-base-name: DemoKB
+  kie-session-name: DemoKS
+  kie-scanner-interval: 60000
+  custom-kie-scanner: true
+  # measure unit of time to live of Alert - Allowed values are D, H, M, S for Days, Hours, Minutes and Seconds
+  alert-ttl-meas-unit: M
+  statistic-enabled: true
+  # The frequency the Drools statistic data are included in the Report message: 1 means they are included in every message,
+  # 2 means 1 time every two reports, 3 means 1 every three reports ...
+  statistic-freq-ratio: 10
+  log-enabled: false
+  debug-enabled: false
+  log-file: ./logs/drools
+  # The maven coordinates of the project defining the Drools rules
+file-feeder:
+    #fact-files: [Person_01.json, Person_02.json]
+    fact-files: [ Person_01.json ]
+    # delay (mSec) between two Fact insertion
+    feeder-delay: 1000
+    show-facts: true
+logging:
+    file:
+      name: './logs/DroolsBridge.log'
+      path: './logs'
+      max-size: 100MB
+      max-history: 10
+      total-size-cap: 200MB
+    pattern:
+      dateformat: 'yyyy-MM-dd'
+      console: '%date{HH:mm:ss.SSS} [%thread] %-5level %class{36}.%method:%line - %msg%n'
+      file: '%d{dd-MM-yyyy HH:mm:ss.SSS} %-5level %logger{36}: %msg%n'
+      rolling-file-name: '${logging.file.path}/archived/nipoc.%d{yyyy-MM-dd}.%i.gz'
+    level:
+      root: INFO
+      it.ctinnovation.theater.drools: DEBUG
+      org.kie: INFO
+      org.drools: INFO
 
 
