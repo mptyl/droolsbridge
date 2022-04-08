@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 
-package it.ctinnovation.droolsbridge.service;
+package it.ctinnovation.droolsbridge.service.drools;
 
 import it.ctinnovation.droolsbridge.drools.KieScannerListener;
+import it.ctinnovation.droolsbridge.model.Person;
 
 /**
  *
@@ -13,9 +14,11 @@ import it.ctinnovation.droolsbridge.drools.KieScannerListener;
  */
 public interface MessageService {
 
-	public void sendRules(KieScannerListener.RuleDescriptorList ruleDescriptorList);
+	public default void sendRules(KieScannerListener.RuleDescriptorList ruleDescriptorList){};
 
 	public void start();
+
+	public void stop();
 	
 	public default String getName(){
 		return "Default Message Service";
@@ -24,5 +27,7 @@ public interface MessageService {
 	public default String getDescr(){
 		return "Description of Default Message Service";
 	}
+
+	public void sendMessage(Person person);
 
 }

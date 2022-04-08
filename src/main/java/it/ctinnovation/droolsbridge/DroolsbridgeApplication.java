@@ -1,8 +1,8 @@
 package it.ctinnovation.droolsbridge;
 
-import it.ctinnovation.droolsbridge.service.DroolsService;
-import it.ctinnovation.droolsbridge.service.FactFeeder;
-import it.ctinnovation.droolsbridge.service.MessageService;
+import it.ctinnovation.droolsbridge.service.drools.DroolsService;
+import it.ctinnovation.droolsbridge.service.drools.FactFeeder;
+import it.ctinnovation.droolsbridge.service.drools.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class DroolsbridgeApplication implements CommandLineRunner, Thread.Uncaug
 		droolService.startAsyncSession();
 		logger.info("Active Message Service is {} - {}", messageService.getName(), messageService.getDescr());
 		messageService.start();
-		feeder.start();
+		//feeder.startFeedingFacts();
 	}
 
 	@Override

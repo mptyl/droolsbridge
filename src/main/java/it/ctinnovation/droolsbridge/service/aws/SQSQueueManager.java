@@ -1,4 +1,4 @@
-package it.ctinnovation.droolsbridge.service;
+package it.ctinnovation.droolsbridge.service.aws;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.services.sqs.AmazonSQSClient;
@@ -12,11 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AWSQueueManager {
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(AWSQueueManager.class);
+public class SQSQueueManager {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(SQSQueueManager.class);
 
     @Autowired
     AWSCredentialsProvider inConsumer;
+
+    @Autowired
+    AWSCredentialsProvider outConsumer;
 
     @Autowired
     AWSCredentialsProvider inProducer;
@@ -48,6 +51,9 @@ public class AWSQueueManager {
     private AmazonSQSClient inProducerClient;
 
     @Autowired
+    private AmazonSQSClient outConsumerClient;
+
+    @Autowired
     private AmazonSQSClient outProducerClient;
 
     public List<Message> receiveInMessage(){
@@ -70,22 +76,42 @@ public class AWSQueueManager {
         SendMessageRequest smr=new SendMessageRequest()
                 .withQueueUrl(inUrl)
                 .withMessageBody(messageBody)
-                .withMessageGroupId("DroolsGroup01")
+                .withMessageGroupId("DroolsGroupIn")
                 .withMessageDeduplicationId(uuid.toString());
         return inProducerClient.sendMessage(smr);
     }
 
     public SendMessageResult sendOutMessage(String messageBody){
+        UUID uuid= UUID.randomUUID();
         SendMessageRequest smr=new SendMessageRequest()
                 .withQueueUrl(outUrl)
                 .withMessageBody(messageBody)
-                .withMessageGroupId("MPGroup")
-                .withMessageDeduplicationId("DupId");
+                .withMessageGroupId("DroolsGroupOut")
+                .withMessageDeduplicationId(uuid.toString());
         return outProducerClient.sendMessage(smr);
     }
 
     public void deleteInMessage(Message message) {
         inConsumerClient.deleteMessage(inUrl,message.getReceiptHandle());
+    }
+
+    public void deleteOutMessage(Message message) {
+        outConsumerClient.deleteMessage(outUrl,message.getReceiptHandle());
+    }
+
+    public List<Message> receiveOutMessage() {
+        ReceiveMessageRequest receiveMessageRequest = new ReceiveMessageRequest(outUrl)
+                .withWaitTimeSeconds(waitTimeSeconds)
+                .withMaxNumberOfMessages(maxNumberMessages);
+        List<Message> sqsMessages = outConsumerClient.receiveMessage(receiveMessageRequest).getMessages();
+        if(sqsMessages.isEmpty())
+            log.debug("Lista messaggi OUT vuota");
+        else
+            for(Message message:sqsMessages) {
+                log.debug("Messaggio OUT:\n{}", message.getBody());
+                deleteOutMessage(message);
+            }
+        return sqsMessages;
     }
 }
 

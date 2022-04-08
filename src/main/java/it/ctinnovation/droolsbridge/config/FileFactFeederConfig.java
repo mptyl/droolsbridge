@@ -5,7 +5,7 @@
  */
 package it.ctinnovation.droolsbridge.config;
 
-import it.ctinnovation.droolsbridge.service.impl.FileFactFeeder;
+import it.ctinnovation.droolsbridge.service.drools.impl.test.FileFactFeeder;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -32,6 +32,11 @@ public class FileFactFeederConfig {
 	private List<String> factFiles;
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
+	/**
+	 * Crea e alimenta la lista dei file da esaminare. Il bean
+	 * fileFactFeeder alla fine conterrà i file da laggere
+	 * @return
+	 */
 	@Bean
 	public FileFactFeeder fileFactFeeder() {
 		List<Path> paths = new ArrayList<>();
@@ -49,6 +54,13 @@ public class FileFactFeederConfig {
 		this.factFiles = factFiles;
 	}
 
+	/**
+	 * Per ogni filename nella lista, prova a leggerlo in varie directory fino a che non lo trovi
+	 *
+	 * @param fileName
+	 * @return
+	 * @throws NoSuchElementException
+	 */
 	private Path find(String fileName) throws NoSuchElementException {
 		// try as it is (if it is absolute path it works)
 		Path tryPath = Paths.get(fileName);

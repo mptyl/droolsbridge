@@ -1,7 +1,7 @@
 /*
  */
 
-package it.ctinnovation.droolsbridge.service;
+package it.ctinnovation.droolsbridge.service.drools;
 
 import it.ctinnovation.droolsbridge.drools.DebugDroolsListener;
 import it.ctinnovation.droolsbridge.drools.KieScannerListener;
@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class DroolsService {
-
+	public static final String MESSAGE_SERVICE = "MessageService";
 	public static final String RULE_LOGGER = "RuleLogger";
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private KieRuntimeLogger kieRuntimeLogger;
@@ -60,6 +60,9 @@ public class DroolsService {
 	@Autowired
 	private KieScannerListener kieScannerListener;
 
+	@Autowired
+	private MessageService messageService;
+
 	private KieBase kieBase;
 	private KieSession kieSession;
 	// start / stop the alternative optional KieScanner thread
@@ -77,6 +80,7 @@ public class DroolsService {
 			logger.info("The new Drools Session creation is succesful.");
 			try {
 				kieSession.setGlobal(RULE_LOGGER, ruleLogger);
+				kieSession.setGlobal(MESSAGE_SERVICE, messageService);
 			} catch (Exception e) {
 				// if the RULE_LOGGER global is not defined in .drl skip
 				logger.warn("Initialization of global " + RULE_LOGGER + " failed. (It is declared in .drl ?): " + e);

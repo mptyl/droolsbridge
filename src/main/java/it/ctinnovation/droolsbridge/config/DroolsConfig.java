@@ -135,6 +135,15 @@ public class DroolsConfig {
                 .build();
     }
 
+    @Bean("outConsumer")
+    @Autowired
+    public AWSCredentialsProvider awsSnsOutConsumerCredential(AWSSecurityTokenService stsClient){
+        return new STSAssumeRoleSessionCredentialsProvider
+                .Builder(outConsumerRole, session)
+                .withStsClient(stsClient)
+                .build();
+    }
+
     @Bean
     @Autowired
     AmazonSQSClient inConsumerClient(AWSCredentialsProvider inConsumer){
@@ -158,6 +167,15 @@ public class DroolsConfig {
     AmazonSQSClient outProducerClient(AWSCredentialsProvider outProducer){
         return (AmazonSQSClient) AmazonSQSClientBuilder.standard()
                 .withCredentials(outProducer)
+                .withRegion(region)
+                .build();
+    }
+
+    @Bean
+    @Autowired
+    AmazonSQSClient outConsumerClient(AWSCredentialsProvider outConsumer){
+        return (AmazonSQSClient) AmazonSQSClientBuilder.standard()
+                .withCredentials(outConsumer)
                 .withRegion(region)
                 .build();
     }

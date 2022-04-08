@@ -6,8 +6,8 @@
 package it.ctinnovation.droolsbridge.drools;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import it.ctinnovation.droolsbridge.service.DroolsService;
-import it.ctinnovation.droolsbridge.service.MessageService;
+import it.ctinnovation.droolsbridge.service.drools.DroolsService;
+import it.ctinnovation.droolsbridge.service.drools.MessageService;
 import it.ctinnovation.droolsbridge.util.ErrorUtil;
 import org.kie.api.builder.Message;
 import org.kie.api.definition.rule.Rule;
@@ -30,7 +30,6 @@ import static java.util.stream.Collectors.toList;
  */
 @Component
 public class KieScannerListener implements KieScannerEventListener {
-
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
