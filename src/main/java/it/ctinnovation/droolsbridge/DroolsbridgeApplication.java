@@ -17,7 +17,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAsync
 public class DroolsbridgeApplication implements CommandLineRunner, Thread.UncaughtExceptionHandler {
-
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired

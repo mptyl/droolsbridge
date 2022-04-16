@@ -180,6 +180,13 @@ public class DroolsConfig {
                 .build();
     }
 
+
+    @Bean
+    @ConfigurationProperties(prefix="measurements")
+    public MeasurementProperties measurementProperties(){
+        return new MeasurementProperties();
+    }
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private String timeZoneCode;

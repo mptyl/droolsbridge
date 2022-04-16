@@ -4,7 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "drools")
 public class DroolsConfigProps {
-
 	private String ruleGroupID;
 	private String ruleArtifactId;
 	private String ruleVersion;

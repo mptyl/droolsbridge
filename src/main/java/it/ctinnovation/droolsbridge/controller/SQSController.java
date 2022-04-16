@@ -1,6 +1,10 @@
 package it.ctinnovation.droolsbridge.controller;
 
 import com.amazonaws.services.sqs.model.Message;
+import it.ctinnovation.droolsbridge.config.MeasurementProperties;
+import it.ctinnovation.droolsbridge.model.DecodedMeasurement;
+import it.ctinnovation.droolsbridge.model.MeasurementType;
+import it.ctinnovation.droolsbridge.model.MeasurementValueType;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +22,20 @@ public class SQSController {
     @Autowired
     SQSQueueManager awsQueueManager;
 
+    @Autowired
+    MeasurementProperties measurementProperties;
+
+
     @PostMapping(value = "/sendInMessage")
     public String sendInMessage(@RequestBody String message){
         log.info("Messaggio:\n{}",message);
         awsQueueManager.sendInMessage(message);
+        /* solo a fine di test del corretto caricamento delle properties in una mappa
+        for(String key:measurementProperties.getMeasurementMap().keySet()){
+            DecodedMeasurement dm= measurementProperties.getMeasurementMap().get(key);
+            log.info("Measurement key={} --> description= {}, type={}, valueType={}}", key, dm.getDescription(), dm.getMeasurementType(), dm.getMeasurementValueType());
+        }
+        */
         return "Inviato messaggio:\n"+message;
     }
 
@@ -34,6 +48,7 @@ public class SQSController {
         for(Message msg:messages){
             response_message.append(msg.getBody()+"\n");
         }
+
         return String.format("Ricevuti messaggi:\n%s ",response_message.toString());
     }
 

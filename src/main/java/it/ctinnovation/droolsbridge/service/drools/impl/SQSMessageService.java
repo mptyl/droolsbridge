@@ -1,6 +1,8 @@
 package it.ctinnovation.droolsbridge.service.drools.impl;
 
-import it.ctinnovation.droolsbridge.model.Person;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import it.ctinnovation.droolsbridge.model.Asset;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import it.ctinnovation.droolsbridge.service.drools.MessageService;
 import org.slf4j.Logger;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.text.MessageFormat;
 
 @Service
-@Profile("prod")
 public class SQSMessageService implements MessageService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -21,6 +22,9 @@ public class SQSMessageService implements MessageService {
 
     @Autowired
     SQSQueueManager awsQueueManager;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Override
     public void start() {
@@ -43,11 +47,9 @@ public class SQSMessageService implements MessageService {
     }
 
     @Override
-    public void sendMessage(Person person) {
-        String outMessage = String.format("%s %s può ottenere la carta sconto FS.", person.getName(), person.getSurName());
-        awsQueueManager.sendOutMessage(outMessage);
-        logger.info(outMessage);
-
-        //logger.info("{} {} può ottenere la carta sconto FS.", person.getName(), person.getSurName());
+    public void sendMessage(Asset asset) throws JsonProcessingException {
+        String output=objectMapper.writeValueAsString(asset);
+        awsQueueManager.sendOutMessage(output);
+        logger.info(asset.toString());
     }
 }

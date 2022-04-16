@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-import it.ctinnovation.droolsbridge.model.Person;
+import it.ctinnovation.droolsbridge.model.Asset;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import it.ctinnovation.droolsbridge.service.drools.DroolsService;
 import it.ctinnovation.droolsbridge.service.drools.FactFeeder;
@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -24,7 +23,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
-@Profile("prod")
 public class SQSFactFeeder implements FactFeeder {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -44,6 +42,7 @@ public class SQSFactFeeder implements FactFeeder {
     @Autowired
     SQSQueueManager awsQueueManager;
     // values injected from config. file
+
     @Value("${sqs-feeder.feeder-delay}")
     private Integer feederDelay;
 
@@ -64,7 +63,7 @@ public class SQSFactFeeder implements FactFeeder {
                 String jsonMsg=message.getBody();
 
                 // TODO - determinazione della classe sulla base della root del messaggio
-                Class clazz = Person.class;
+                Class clazz = Asset.class;
                 ObjectReader objReader = objectMapper.readerFor(clazz);
 
                 // TODO fare corretto try-catch
