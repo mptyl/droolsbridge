@@ -6,10 +6,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.util.HashMap;
 import java.util.Map;
 
-//@ConfigurationProperties(prefix="measurements")
+/**
+ * Mappa key-value relativa alle misure che permette di associare a una key definita come stringa da un utente:
+ * - una descrizione della misura, come label
+ * - un tipo misura (es VOLT, AMPERE, ecc.)
+ * - un tipo valore misura (es. INT, FLOAT, ecc.)
+ *
+ * Questa mappatura permette di razionalizzare e standardizzare la gestione delle misure ai fini del calcolo
+ * delle rules
+ */
 public class MeasurementProperties {
     public Map<String, DecodedMeasurement> measurementMap = new HashMap<>();
 
+    //region Accessors
     public Map<String, DecodedMeasurement> getMeasurementMap() {
         return measurementMap;
     }
@@ -24,4 +33,5 @@ public class MeasurementProperties {
                 "measurementMap=" + measurementMap +
                 '}';
     }
+    //endregion
 }

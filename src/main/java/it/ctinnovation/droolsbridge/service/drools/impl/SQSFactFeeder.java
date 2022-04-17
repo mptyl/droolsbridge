@@ -5,10 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
+import it.ctinnovation.droolsbridge.config.MeasurementProperties;
 import it.ctinnovation.droolsbridge.model.Asset;
+import it.ctinnovation.droolsbridge.model.Measurement;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import it.ctinnovation.droolsbridge.service.drools.DroolsService;
 import it.ctinnovation.droolsbridge.service.drools.FactFeeder;
+import it.ctinnovation.droolsbridge.util.MeasurementMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +46,9 @@ public class SQSFactFeeder implements FactFeeder {
     SQSQueueManager awsQueueManager;
     // values injected from config. file
 
+    @Autowired
+    MeasurementProperties measurementProperties;
+
     @Value("${sqs-feeder.feeder-delay}")
     private Integer feederDelay;
 
@@ -69,11 +75,16 @@ public class SQSFactFeeder implements FactFeeder {
                 // TODO fare corretto try-catch
                 // TODO rendere agnostico rispetto alla classe
                 try  {
-                    Object fact= objReader.readValue(jsonMsg);
+                    //Object fact= objReader.readValue(jsonMsg);
+                    Asset fact= (Asset) objReader.readValue(jsonMsg);
+                    // completa i Measurement sulla base della mappatura adottata
+                    MeasurementMapper.remapMeasurement(fact,measurementProperties);
                     if (showFacts) {
                         logger.info("New fact: {}", fact.toString());
                     }
+                    // Inserisce il fatto nella working memory di Drools
                     droolsService.addToSession(fact);
+
                     if (feederDelay > 0) {
                         Thread.sleep(feederDelay);
                     }
