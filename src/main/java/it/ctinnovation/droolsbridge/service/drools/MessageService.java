@@ -6,7 +6,7 @@
 package it.ctinnovation.droolsbridge.service.drools;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import it.ctinnovation.droolsbridge.drools.KieScannerListener;
-import it.ctinnovation.droolsbridge.model.Asset;
+import it.ctinnovation.droolsbridge.model.EventAsset;
 
 /**
  *
@@ -28,6 +28,6 @@ public interface MessageService {
 		return "Description of Default Message Service";
 	}
 
-	public void sendMessage(Asset asset) throws JsonProcessingException;
+	public void sendMessage(EventAsset asset) throws JsonProcessingException;
 
 }

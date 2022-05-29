@@ -46,6 +46,7 @@ public class SQSController {
             return "Coda messaggi vuota";
         StringBuilder response_message=new StringBuilder();
         for(Message msg:messages){
+            log.info("Ricevuto messaggio\n{}",msg.getBody());
             response_message.append(msg.getBody()+"\n");
         }
 

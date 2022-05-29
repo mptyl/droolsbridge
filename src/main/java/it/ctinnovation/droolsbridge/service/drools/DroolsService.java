@@ -5,7 +5,9 @@ package it.ctinnovation.droolsbridge.service.drools;
 
 import it.ctinnovation.droolsbridge.drools.DebugDroolsListener;
 import it.ctinnovation.droolsbridge.drools.KieScannerListener;
+import it.ctinnovation.droolsbridge.model.TheaterPointOfAttention;
 import it.ctinnovation.droolsbridge.props.DroolsConfigProps;
+import it.ctinnovation.droolsbridge.service.SetupService;
 import it.ctinnovation.droolsbridge.util.ErrorUtil;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,6 +50,9 @@ public class DroolsService {
 	// configuration properties coming from the application.yml file (only properties with "drools" are here
 	@Autowired
 	private DroolsConfigProps droolsConfigProps;
+
+	@Autowired
+	SetupService setupService;
 
 	@Autowired
 	private KieContainer kieContainer;
@@ -101,6 +106,13 @@ public class DroolsService {
 				// run a scheduled Thread calling kieScanner.scanNow()
 				startCustomKieScanner();
 			}
+
+			TheaterPointOfAttention poa=setupService.setPioltello();
+			TheaterPointOfAttention poamelzo=setupService.setMelzo();
+			kieSession.insert(poa);
+			logger.info("Loading POA: {}", poa.toString());
+			kieSession.insert(poamelzo);
+			logger.info("Loading POA: {}", poamelzo.toString());
 
 		} catch (Exception e) {
 			throw new RuntimeException("DROOLS initialization error.", e);

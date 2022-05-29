@@ -1,12 +1,13 @@
 package it.ctinnovation.droolsbridge.util;
 
 import it.ctinnovation.droolsbridge.config.MeasurementProperties;
-import it.ctinnovation.droolsbridge.model.Asset;
+import it.ctinnovation.droolsbridge.model.EventAsset;
 import it.ctinnovation.droolsbridge.model.Measurement;
 import it.ctinnovation.droolsbridge.model.Threshold;
 
 public class MeasurementMapper{
-    public static void remapMeasurement(Asset a, MeasurementProperties p){
+    public static void remapMeasurement(Object o, MeasurementProperties p){
+        EventAsset a = (EventAsset) o;
         for (Measurement m:a.getPayload()){
             mapProperties(p, m);
         }

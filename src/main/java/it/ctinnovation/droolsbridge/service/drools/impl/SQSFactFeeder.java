@@ -6,12 +6,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import it.ctinnovation.droolsbridge.config.MeasurementProperties;
-import it.ctinnovation.droolsbridge.model.Asset;
-import it.ctinnovation.droolsbridge.model.Measurement;
+import it.ctinnovation.droolsbridge.model.*;
+import it.ctinnovation.droolsbridge.service.SetupService;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import it.ctinnovation.droolsbridge.service.drools.DroolsService;
 import it.ctinnovation.droolsbridge.service.drools.FactFeeder;
 import it.ctinnovation.droolsbridge.util.MeasurementMapper;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ public class SQSFactFeeder implements FactFeeder {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    SetupService setupService;
 
     @Autowired
     @Lazy
@@ -68,23 +72,24 @@ public class SQSFactFeeder implements FactFeeder {
             for(Message message: messages){
                 String jsonMsg=message.getBody();
 
-                // TODO - determinazione della classe sulla base della root del messaggio
-                Class clazz = Asset.class;
+                //////////////////  Messaggio ricevuto da Theater
+                Class clazz = EventAsset.class;
                 ObjectReader objReader = objectMapper.readerFor(clazz);
 
-                // TODO fare corretto try-catch
-                // TODO rendere agnostico rispetto alla classe
                 try  {
-                    //Object fact= objReader.readValue(jsonMsg);
-                    Asset fact= (Asset) objReader.readValue(jsonMsg);
+                    EventAsset eventAsset= objReader.readValue(jsonMsg);
                     // completa i Measurement sulla base della mappatura adottata
-                    MeasurementMapper.remapMeasurement(fact,measurementProperties);
-                    if (showFacts) {
-                        logger.info("New fact: {}", fact.toString());
-                    }
-                    // Inserisce il fatto nella working memory di Drools
-                    droolsService.addToSession(fact);
+                    MeasurementMapper.remapMeasurement(eventAsset,measurementProperties);
 
+                    ////////////////// Inserimento nella working memory di Drools di un TheaterEvent per ogni misura
+                    for(Measurement m:eventAsset.getPayload()){
+                        TheaterEvent te = new TheaterEvent(eventAsset.getPlacemarkId(),eventAsset.getPosition(),eventAsset.getStatus(),eventAsset.getTimestamp(),eventAsset.getAttribute(),m);
+                        droolsService.addToSession(te);
+                        if (showFacts) {
+                            logger.info("Inserito TheaterEvent {}",te);
+                        }
+                    }
+                    ///////////////// Introduci un delay di 1 secondo
                     if (feederDelay > 0) {
                         Thread.sleep(feederDelay);
                     }
@@ -97,7 +102,6 @@ public class SQSFactFeeder implements FactFeeder {
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
-
             }
         }
 

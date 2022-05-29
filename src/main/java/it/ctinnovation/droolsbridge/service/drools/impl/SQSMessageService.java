@@ -2,7 +2,7 @@ package it.ctinnovation.droolsbridge.service.drools.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.ctinnovation.droolsbridge.model.Asset;
+import it.ctinnovation.droolsbridge.model.EventAsset;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import it.ctinnovation.droolsbridge.service.drools.MessageService;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class SQSMessageService implements MessageService {
     }
 
     @Override
-    public void sendMessage(Asset asset) throws JsonProcessingException {
+    public void sendMessage(EventAsset asset) throws JsonProcessingException {
         String output=objectMapper.writeValueAsString(asset);
         awsQueueManager.sendOutMessage(output);
         logger.info(asset.toString());
