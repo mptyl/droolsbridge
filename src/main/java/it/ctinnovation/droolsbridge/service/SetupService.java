@@ -1,14 +1,56 @@
 package it.ctinnovation.droolsbridge.service;
 
+import com.amazonaws.services.dynamodbv2.xspec.M;
 import it.ctinnovation.droolsbridge.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class SetupService {
+
+
+
+    public TheaterPointOfAttention setPioltello(){
+        String placemarkId="463";
+        double latitude=45.49262821528002;
+        double longitude=9.321798469966655;
+        Position position = new Position(latitude,longitude);
+        TheaterPointOfAttention poa = new TheaterPointOfAttention();
+        MeasurementType measurementType= MeasurementType.PPM;
+        MeasurementValueType measurementValueType=MeasurementValueType.INT;
+        poa.setPlacemarkId(placemarkId);
+        poa.setPosition(position);
+        poa.setMeasurementKey("ppm");
+        poa.setMeasurementType(measurementType);
+        poa.setMeasurementValueType(measurementValueType);
+        poa.setStatus(Status.UNDEFINED);
+        TheaterAttribute ta = new TheaterAttribute();
+        ta.setAttributeId("Co2");
+        poa.setAttribute(ta);
+        return poa;
+    }
+
+    public TheaterPointOfAttention setVimercate(){
+        String placemarkId="647";
+        double latitude=45.613482 ;
+        double longitude=9.372463;
+        Position position = new Position(latitude,longitude);
+        TheaterPointOfAttention poa = new TheaterPointOfAttention();
+        MeasurementType measurementType= MeasurementType.PPM;
+        MeasurementValueType measurementValueType=MeasurementValueType.INT;
+        poa.setPlacemarkId(placemarkId);
+        poa.setPosition(position);
+        poa.setMeasurementKey("ppm");
+        poa.setMeasurementType(measurementType);
+        poa.setMeasurementValueType(measurementValueType);
+        poa.setStatus(Status.UNDEFINED);
+        TheaterAttribute ta = new TheaterAttribute();
+        ta.setAttributeId("Co2");
+        poa.setAttribute(ta);
+        return poa;
+    }
 
     public EventAsset setCernusco(){
         String placemarkId="co2001";
@@ -29,30 +71,6 @@ public class SetupService {
         double latitude=45.492113;
         double longitude=9.284531;
         return setupPlacemark(placemarkId,latitude,longitude,createCo2Attribute(),setupCo2Mesurement(900));
-    }
-
-    public TheaterPointOfAttention setPioltello(){
-        String placemarkId="Pioltello";
-        double latitude=45.49262821528002;
-        double longitude=9.321798469966655;
-        Position position = new Position(latitude,longitude);
-        TheaterPointOfAttention poa = new TheaterPointOfAttention();
-        poa.setPlacemarkId(placemarkId);
-        poa.setPosition(position);
-        poa.setMeasurementKey("ppm");
-        return poa;
-    }
-
-    public TheaterPointOfAttention setMelzo(){
-        String placemarkId="Melzo";
-        double latitude=45.495635 ;
-        double longitude=9.417300;
-        Position position = new Position(latitude,longitude);
-        TheaterPointOfAttention poa = new TheaterPointOfAttention();
-        poa.setPlacemarkId(placemarkId);
-        poa.setPosition(position);
-        poa.setMeasurementKey("ppm");
-        return poa;
     }
 
     public EventAsset setupPlacemark(String placemarkId, double latitude, double longitude, TheaterAttribute attribute, Measurement measurement){

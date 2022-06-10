@@ -52,6 +52,7 @@ public class DroolsService {
 	private DroolsConfigProps droolsConfigProps;
 
 	@Autowired
+
 	SetupService setupService;
 
 	@Autowired
@@ -107,12 +108,12 @@ public class DroolsService {
 				startCustomKieScanner();
 			}
 
-			TheaterPointOfAttention poa=setupService.setPioltello();
-			TheaterPointOfAttention poamelzo=setupService.setMelzo();
-			kieSession.insert(poa);
-			logger.info("Loading POA: {}", poa.toString());
-			kieSession.insert(poamelzo);
-			logger.info("Loading POA: {}", poamelzo.toString());
+			TheaterPointOfAttention poaPioltello=setupService.setPioltello();
+			TheaterPointOfAttention poaVimercate=setupService.setVimercate();
+			kieSession.insert(poaPioltello);
+			logger.info("Loading POA: {}", poaPioltello.toString());
+			kieSession.insert(poaVimercate);
+			logger.info("Loading POA: {}", poaVimercate.toString());
 
 		} catch (Exception e) {
 			throw new RuntimeException("DROOLS initialization error.", e);

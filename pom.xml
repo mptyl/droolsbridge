@@ -14,8 +14,8 @@
 	<name>droolsbridge</name>
 	<description>Bridge tra backend Theater e Drools</description>
 	<properties>
-		<java.version>11</java.version>
-		<drools.version>7.67.0.Final</drools.version>
+		<java.version>17</java.version>
+		<drools.version>7.69.0.Final</drools.version>
 	</properties>
 	<profiles>
 		<profile>

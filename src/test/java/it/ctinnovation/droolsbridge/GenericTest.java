@@ -9,9 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 
 public class GenericTest {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(GenericTest.class);
@@ -106,6 +104,30 @@ public class GenericTest {
 
     @Test
     public void testDistanceBetweenToPoints(){
+        TheaterAsset ta1= new TheaterAsset();
+        ta1.setPlacemarkId("ta1");
+        ta1.setPosition(new Position(45.519322,9.358348));
+        ta1.setMeasurementKey("co2");
+        ta1.setThresholdLevel(ThresholdLevel.WARNING);
+        ta1.setMeasurementType(MeasurementType.PPM);
+        ta1.setMeasurementValueType(MeasurementValueType.FLOAT);
+        ta1.setValue("4000");
+
+        TheaterAsset ta2= new TheaterAsset();
+        ta2.setPlacemarkId("ta2");
+        ta2.setPosition(new Position(45.492113,9.284531));
+        ta2.setMeasurementKey("co2");
+        ta2.setThresholdLevel(ThresholdLevel.WARNING);
+        ta2.setMeasurementType(MeasurementType.PPM);
+        ta2.setMeasurementValueType(MeasurementValueType.FLOAT);
+        ta2.setValue("4000");
+
+        List<TheaterAsset> tal= new ArrayList<>();
+        tal.add(ta1);
+        tal.add(ta2);
+
+        TheaterPointOfAttention tpoa = new TheaterPointOfAttention("tpoa1",new Position(45.492628,9.321798),"co2");
+        Assertions.assertEquals(tpoa.numberOfAssetInRegion(5,ThresholdLevel.WARNING,tal),2);
 
     }
 
