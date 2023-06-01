@@ -1,6 +1,5 @@
 package it.ctinnovation.droolsbridge.service;
 
-import com.amazonaws.services.dynamodbv2.xspec.M;
 import it.ctinnovation.droolsbridge.model.*;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,11 @@ public class SetupService {
         double latitude=45.49262821528002;
         double longitude=9.321798469966655;
         Position position = new Position(latitude,longitude);
+
         TheaterPointOfAttention poa = new TheaterPointOfAttention();
         MeasurementType measurementType= MeasurementType.PPM;
         MeasurementValueType measurementValueType=MeasurementValueType.INT;
+
         poa.setPlacemarkId(placemarkId);
         poa.setPosition(position);
         poa.setMeasurementKey("ppm");

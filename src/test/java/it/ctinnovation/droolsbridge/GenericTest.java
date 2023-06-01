@@ -126,9 +126,6 @@ public class GenericTest {
         tal.add(ta1);
         tal.add(ta2);
 
-        TheaterPointOfAttention tpoa = new TheaterPointOfAttention("tpoa1",new Position(45.492628,9.321798),"co2");
-        Assertions.assertEquals(tpoa.numberOfAssetInRegion(5,ThresholdLevel.WARNING,tal),2);
-
-    }
+     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,9 +17,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 @EnableAsync
-public class DroolsbridgeApplication implements CommandLineRunner, Thread.UncaughtExceptionHandler {
+public class DroolsbridgeApplication extends SpringBootServletInitializer implements CommandLineRunner, Thread.UncaughtExceptionHandler {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
+//	@Bean
+//	public ServletWebServerFactory servletWebServerFactory() {
+//		return new TomcatServletWebServerFactory();
+//	}
 	@Autowired
 	@Lazy
 	private DroolsService droolService;

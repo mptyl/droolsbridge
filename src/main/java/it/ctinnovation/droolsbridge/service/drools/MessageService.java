@@ -4,11 +4,10 @@
  */
 
 package it.ctinnovation.droolsbridge.service.drools;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import it.ctinnovation.droolsbridge.drools.KieScannerListener;
 import it.ctinnovation.droolsbridge.model.DAsset;
-import it.ctinnovation.droolsbridge.model.EventAsset;
-import it.ctinnovation.droolsbridge.model.TheaterPointOfAttention;
 
 /**
  *
@@ -21,7 +20,7 @@ public interface MessageService {
 	public void start();
 
 	public void stop();
-	
+
 	public default String getName(){
 		return "Default Message Service";
 	}

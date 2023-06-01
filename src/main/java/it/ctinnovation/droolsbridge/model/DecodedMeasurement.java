@@ -1,12 +1,5 @@
 package it.ctinnovation.droolsbridge.model;
 
-import it.ctinnovation.droolsbridge.model.MeasurementType;
-import it.ctinnovation.droolsbridge.model.MeasurementValueType;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 public class DecodedMeasurement {
     String description;
     MeasurementType measurementType;

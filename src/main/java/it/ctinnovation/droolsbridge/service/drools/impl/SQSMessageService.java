@@ -3,21 +3,12 @@ package it.ctinnovation.droolsbridge.service.drools.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.ctinnovation.droolsbridge.model.DAsset;
-import it.ctinnovation.droolsbridge.model.EventAsset;
-import it.ctinnovation.droolsbridge.model.Measurement;
-import it.ctinnovation.droolsbridge.model.TheaterPointOfAttention;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import it.ctinnovation.droolsbridge.service.drools.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Service
 public class SQSMessageService implements MessageService {

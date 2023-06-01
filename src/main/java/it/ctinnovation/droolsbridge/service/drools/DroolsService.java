@@ -9,10 +9,6 @@ import it.ctinnovation.droolsbridge.model.TheaterPointOfAttention;
 import it.ctinnovation.droolsbridge.props.DroolsConfigProps;
 import it.ctinnovation.droolsbridge.service.SetupService;
 import it.ctinnovation.droolsbridge.util.ErrorUtil;
-import java.util.Collection;
-import java.util.concurrent.atomic.AtomicBoolean;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
@@ -25,6 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * This class provides the Drools services:

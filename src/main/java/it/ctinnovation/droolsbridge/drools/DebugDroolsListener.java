@@ -5,12 +5,13 @@
  */
 package it.ctinnovation.droolsbridge.drools;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.drools.core.event.DefaultAgendaEventListener;
 import org.kie.api.definition.rule.Rule;
 import org.kie.api.event.rule.AfterMatchFiredEvent;
 import org.slf4j.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *

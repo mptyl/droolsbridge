@@ -2,7 +2,6 @@ package it.ctinnovation.droolsbridge.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.ctinnovation.droolsbridge.config.MeasurementProperties;
 import it.ctinnovation.droolsbridge.service.SetupService;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import org.slf4j.LoggerFactory;

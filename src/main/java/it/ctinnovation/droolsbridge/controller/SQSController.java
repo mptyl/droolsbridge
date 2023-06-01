@@ -2,9 +2,6 @@ package it.ctinnovation.droolsbridge.controller;
 
 import com.amazonaws.services.sqs.model.Message;
 import it.ctinnovation.droolsbridge.config.MeasurementProperties;
-import it.ctinnovation.droolsbridge.model.DecodedMeasurement;
-import it.ctinnovation.droolsbridge.model.MeasurementType;
-import it.ctinnovation.droolsbridge.model.MeasurementValueType;
 import it.ctinnovation.droolsbridge.service.aws.SQSQueueManager;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
